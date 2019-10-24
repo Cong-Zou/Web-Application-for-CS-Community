@@ -4,15 +4,11 @@ public class AuthorDataCollector {
 
     public void collect(AMiner aMiner, GoogleCitation gCitation, WebPage webPage) {
         System.out.println("Starting to collect author data...");
-        List<String[]> authors = Author.getAllAuthors();
-        String name, affiliation;
+        List<String> authors = Author.getAllAuthors();
         Author author;
 
-        for (String[] nameAndAff : authors) {
-            name = nameAndAff[0];
-            affiliation = nameAndAff[1];
-            boolean hasAffiliation = !affiliation.equals("null");
-            author = new Author(name, hasAffiliation ? affiliation : null, hasAffiliation);
+        for (String name : authors) {
+            author = new Author(name);
 
             // use AMiner to collect affiliation, title, email, interests, photo and homepage info
             aMiner.collectAuthorInfo(author);

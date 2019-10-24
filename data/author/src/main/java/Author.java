@@ -7,7 +7,6 @@ public class Author {
 
     private String name;
     private String affiliation;
-    private boolean hasAffiliation;
     private String title;
     private String photo;
     private String interests;
@@ -22,14 +21,8 @@ public class Author {
     static int photoUpdate = 0;
     static int homepageUpdate = 0;
 
-    public Author(String name, String affiliation, boolean hasAffiliation) {
+    public Author(String name) {
         this.name = name;
-        this.affiliation = affiliation;
-        this.hasAffiliation = hasAffiliation;
-    }
-
-    public boolean hasAffiliation() {
-        return this.hasAffiliation;
     }
 
     public String getName() {
@@ -72,7 +65,7 @@ public class Author {
         return homepage;
     }
 
-    public static List<String[]> getAllAuthors() {
+    public static List<String> getAllAuthors() {
         return dbDriver.getPeople();
     }
 
@@ -121,10 +114,10 @@ public class Author {
         authorCount++;
         StringBuilder updateCommand = new StringBuilder();
 
-        updateCommand.append(String.format("MATCH (a {name: \'%s\'}) SET ", this.name));
+        updateCommand.append(String.format("MATCH (a:Author {name: \'%s\'}) SET ", this.name));
         int commandSize = updateCommand.length();
 
-        if (!this.hasAffiliation && this.affiliation != null) {
+        if (this.affiliation != null) {
             updateCommand.append(String.format("a.affiliation = \'%s\', ", this.affiliation));
             affiliationUpdate++;
         }
