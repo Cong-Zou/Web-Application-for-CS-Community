@@ -23,7 +23,7 @@ router.get('/paper', async (req, res, next) => {
         const title = req.query.title;
         console.log('title is', title);
         const result = await session.run(
-            `Match (p1:Paper) where p1.title=$title RETURN p1 as paper, [(author:Person)-[:Writes]->(p1:Paper)|author.name] as authors,  [(p1:Paper) -[:Cites]->(p2:Paper)|p2.title] as citations`,
+            `Match (p1:Paper) where p1.title=$title RETURN p1 as paper, [(author:Author)-[:Writes]->(p1:Paper)|author.name] as authors,  [(p1:Paper) -[:Cites]->(p2:Paper)|p2.title] as citations`,
             {title: title}
         );
         console.log(result.records);
@@ -59,7 +59,7 @@ router.get('/person', async (req, res, next) => {
         console.log('name is', name);
 
         const result = await session.run(
-            `Match (p1:Person) where p1.name=$name RETURN p1 as person, [(p1:Person)-[:Writes]->(p2:Paper)|p2.title] as publicationList`,
+            `Match (p1:Author) where p1.name=$name RETURN p1 as person, [(p1:Author)-[:Writes]->(p2:Paper)|p2.title] as publicationList`,
             {name: name}
         );
         console.log(result.records);
@@ -97,7 +97,7 @@ router.get('/person/publications', async (req, res) => {
         console.log('name startYear endYear', name, startYear, endYear);
 
         const result = await session.run(
-            `Match (p1:Person) where p1.name=$name RETURN [(p1:Person)-[:Writes]->(p2:Paper) where toInteger(p2.year)<=$endYear and toInteger(p2.year)>=$startYear |p2] as publicationList`,
+            `Match (p1:Author) where p1.name=$name RETURN [(p1:Author)-[:Writes]->(p2:Paper) where toInteger(p2.year)<=$endYear and toInteger(p2.year)>=$startYear |p2] as publicationList`,
             {name: name, startYear: startYear, endYear: endYear}
         );
         console.log(result.records);
@@ -121,7 +121,7 @@ router.get('/person/coworkers', async (req, res) => {
         console.log('name', name);
 
         const result = await session.run(
-            `Match (p1:Person)-[:Writes]->(p2:Paper) where p1.name=$name return [(p3:Person)-[:Writes]->(p2) where p3.name<>p1.name |p3] as coworkers`,
+            `Match (p1:Author)-[:Writes]->(p2:Paper) where p1.name=$name return [(p3:Author)-[:Writes]->(p2) where p3.name<>p1.name |p3] as coworkers`,
             {
                 name: name
             }
@@ -147,7 +147,7 @@ router.get('/channel', async (req, res) => {
         console.log('name', name);
 
         const result = await session.run(
-            `Match (p1:Person)-[:Writes]->(p2:Paper) where p2.venue=$name With p2.volume as volume,p1 return volume,count(p1) as counts`, {
+            `Match (p1:Author)-[:Writes]->(p2:Paper) where p2.venue=$name With p2.volume as volume,p1 return volume,count(p1) as counts`, {
                 name: name
             }
         );
@@ -177,7 +177,7 @@ router.get('/search/experts', async (req, res) => {
         console.log('key', key);
 
         const result = await session.run(
-            `Match (p2:Person) WHERE p2.interests CONTAINS $key return p2 as person`,
+            `Match (p2:Author) WHERE p2.interests CONTAINS $key return p2 as person`,
             {
                 key: key
             }
