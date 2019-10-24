@@ -6,9 +6,9 @@ import java.util.List;
 public class DBDriver implements AutoCloseable {
     private final Driver driver;
 
-    private final String URI = "bolt://localhost:7687";
-    private final String USER = "root";
-    private final String PASSWORD = "cmu12345";
+    private final String URI = "bolt://129.146.189.33:7687";
+    private final String USER = "neo4j";
+    private final String PASSWORD = "diwd-team7";
 
 
     public DBDriver() {
