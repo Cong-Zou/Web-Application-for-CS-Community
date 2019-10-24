@@ -3,9 +3,19 @@ var router = express.Router();
 
 const neo4j = require('neo4j-driver').v1;
 
-const uri = 'bolt://localhost:7688';
-const driver = neo4j.driver(uri);
-// const driver = neo4j.driver(uri, neo4j.auth.basic(user, password));
+let neo4j_addr = process.env.NEO4J_URI || "";
+const user = neo4j_addr.split('|')[0];
+const password = neo4j_addr.split('|')[1];
+neo4j_addr = neo4j_addr.split('|')[2] || 'bolt://localhost:7688';
+let driver;
+if (!user) {
+    console.log('start neo4j driver without auth addr:', neo4j_addr);
+    driver = neo4j.driver(neo4j_addr);
+} else {
+    console.log('start neo4j driver addr:', neo4j_addr, user, password);
+    driver = neo4j.driver(neo4j_addr, neo4j.auth.basic(user, password));
+}
+
 const session = driver.session();
 /* GET home page. */
 router.get('/paper', async (req, res, next) => {
