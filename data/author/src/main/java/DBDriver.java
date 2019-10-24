@@ -25,7 +25,7 @@ public class DBDriver implements AutoCloseable {
         }
     }
 
-    public List<String[]> getPeople()
+    public List<String> getPeople()
     {
         try ( Session session = driver.session() )
         {
@@ -33,15 +33,14 @@ public class DBDriver implements AutoCloseable {
         }
     }
 
-    private static List<String[]> matchPersonNodes( Transaction tx )
+    private static List<String> matchPersonNodes( Transaction tx )
     {
-        List<String[]> people = new ArrayList<>();
-        StatementResult result = tx.run( "MATCH (a:Person) RETURN a.name, a.affiliation" );
+        List<String> people = new ArrayList<>();
+        StatementResult result = tx.run( "MATCH (a:Author) RETURN a.name" );
         while (result.hasNext())
         {
             Record author = result.next();
-            String[] nameAndAff = {author.get(0).asString(), author.get(1).asString()};
-            people.add(nameAndAff);
+            people.add(author.get(0).asString());
         }
         return people;
     }

@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class AMiner {
     private final String ENDPOINT_BASIC = "https://api.aminer.org/api/search/person";
-    private final String ENDPOINT_ADVANCED = "https://api.aminer.org/api/search/person/advanced";
+    // private final String ENDPOINT_ADVANCED = "https://api.aminer.org/api/search/person/advanced";
 
     public void collectAuthorInfo(Author author) {
         String response = searchAuthor(author);
@@ -24,14 +24,14 @@ public class AMiner {
         String name = author.getName();
 
         try {
-            URL url;
-            if (author.hasAffiliation()) {
-                url = new URL(ENDPOINT_ADVANCED
-                        + "?name=" + URLEncoder.encode(name, "UTF-8")
-                        + "&org=" + URLEncoder.encode(author.getAffiliation(), "UTF-8"));
-            } else {
-                url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
-            }
+            URL url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
+//            if (author.hasAffiliation()) {
+//                url = new URL(ENDPOINT_ADVANCED
+//                        + "?name=" + URLEncoder.encode(name, "UTF-8")
+//                        + "&org=" + URLEncoder.encode(author.getAffiliation(), "UTF-8"));
+//            } else {
+//                url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
+//            }
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
