@@ -6,16 +6,18 @@ angular.module("sose-research-community")
 
 
 	// //uncomment the lines below once these routes are implemented
-	$scope.changeViewToAllThreads = function(){
-		$scope.changePCView = "";
-	}
-
-	$scope.changeViewToSendPrivMessage = function(){
-		$scope.changePCView = "newPC";
-	}
-
-	$scope.showAllQueries = function(){
-		$scope.changePCView = "allQueries";
+	$scope.getResult = function(){
+		var name = document.getElementById("researcher").value;
+		$http.get(" https://diwd-team7.herokuapp.com/api/person/coworkers?name=" + name).then(function(response){
+			console.log("in")
+			console.log(response.data);
+			$scope.collaborators = new Array();
+			for (var i=0; i < response.data.length; i++){
+				$scope.collaborators.push(response.data[i].name);
+			}
+			console.log($scope.collaborators)
+			$scope.changePCView = "showResult";
+		});
 	}
 
 });

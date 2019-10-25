@@ -3,8 +3,8 @@
 <div class="container">
 	<div class="col-12">
         <!-- <button ng-click="showAllQueries()">Back</button> -->
-        <h2 style="text-align: center;">Query 5</h2>
-        <h2>Given a publication channel (a journal or a conference) and a year, list the focused topics of the papers (based on titles and abstracts) and show in Tableau generated diagram.</h2>
+        <h3 style="text-align: center;">Query 5</h2>
+        <h4>Given a publication channel (a journal or a conference) and a year, list the focused topics of the papers (based on titles and abstracts) and show in Tableau generated diagram.</h2>
         <div class="idxcontainer">
             <input type="text" name="search" ng-model="search.publication" placeholder="Publication Channel" id="channel">
             <input type="text" name="search" ng-model="search.year" placeholder="Year" id="year">
@@ -14,14 +14,14 @@
         </div>
         <div ng-switch="changePCView">
             <div ng-switch-when="showResult">
-                 <table>
+                 <table border="1" style="margin-top: 20px;">
                  <thead class="thead-dark">
                     <tr>
                         <th scope="col">Topic</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="topic in topics">
+                    <tr ng-repeat="topic in topicArr">
                         <td>{{topic}}</td>
                     </tr>
                 </tbody>

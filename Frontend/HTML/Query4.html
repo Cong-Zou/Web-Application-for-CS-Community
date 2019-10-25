@@ -24,7 +24,7 @@
                 <tbody>
                     <tr ng-repeat="expert in experts">
                         <td>{{expert.name}}</td>
-                        <td ng-if="expert.photoUrl != 'null'" align="center"><img ng-src="{{expert.photoUrl}}"></td>
+                        <td ng-if="expert.photoUrl != 'null'" align="center"><img width ="100" height="100" ng-src="{{expert.photoUrl}}"></td>
                         <td ng-if="expert.photoUrl == 'null'" align="center"></td>
                         <td align="center">{{expert.affiliation}}</td>
                     </tr>

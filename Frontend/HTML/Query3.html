@@ -1,23 +1,24 @@
 <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<div class="container">
+<div class="container" ng-controller="Q3Controller">
 	<div class="col-12">
         <!-- <button ng-click="showAllQueries()">Back</button> -->
-        <h2 style="text-align: center;">Query 3</h2>
-        <h2>Given a journal name, generate a histogram showcasing the number of authors contributing to each of its volume, taking volume as the base axis. </h2>
+        <h3 style="text-align: center;">Query 3</h2>
+        <h4>Given a journal name, generate a histogram showcasing the number of authors contributing to each of its volume, taking volume as the base axis. </h2>
         <div class="idxcontainer">
             <input type="text" name="search" ng-model="search.journal" placeholder="Journal Name" id="journal">
             <button type="submit" class="btn btn-search" ng-click="getResult()">
                 <i class="fa fa-search"></i>
             </button>
         </div>
-        <div ng-switch="changePCView">
-            <div ng-switch-when="showResult">
+        <!-- <div ng-switch="changePCView">
+            <div ng-switch-when="showResult"> -->
                 <div id = "journalHistogram">
-                    
+                    <svg id="svg" width="600" height="300"></svg>
+                    <!-- <div id="chart" class='chart' style="position:relative; height:250px; width: 500px; margin-right: auto; margin-left: auto;"></div> -->
                 </div>
         
-            </div>
-          </div>  
+            <!-- </div> -->
+          <!-- </div>  --> 
 	</div>
 </div>

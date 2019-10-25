@@ -1,11 +1,29 @@
 
-var app = angular.module("sose-research-community", ["ui.router" /* declare use of module here */]); //this tells the main app the services youre gonna use
+console.log("in main.js");
+var app = angular.module("sose-research-community", ["ui.router", "chart.js" /* declare use of module here */]); //this tells the main app the services youre gonna use
 
 //ui-router allows for 'back' functionality 
 //state provider allows you to define different states 
 
 app.controller("main-controller", function($scope, $http, $window, $mdDialog, ngNotify) {
-
+	console.log("main-controller")
+	$scope.chart_data = "40, 80, 15, 60, 23, 95";
+	$scope.updateChart = function() {
+		console.log("doing function");
+		var index = 0;
+		var data = angular.fromJson("[" + $scope.chart_data + "]");
+		var bar_width = 500 / (data.length); 
+		/* Clear out the existing elements. */
+		d3.selectAll('.chart').selectAll('div').remove();
+		d3.select(".chart")
+        .selectAll("div")
+        .data(data)
+        .enter().append("div")
+        .style("width", function(d) { return bar_width + "px"; })
+        .style("height", function(d) { return d + "%"; })
+        /* +2 as we have a 1px margin */
+        .style("left", function(d) { return (index++) * (bar_width + 2) + "px"; }); 
+	}
 
 });
 
@@ -45,6 +63,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		url: '/query7',
 		templateUrl: '../HTML/Query7.html',
 		controller: "Q7Controller"
+	})
+	.state('home', {
+		url: '/home',
+		templateUrl: '../HTML/index.html',
+		controller: "main-controller"
 	})
 	
 

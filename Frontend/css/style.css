@@ -14,6 +14,9 @@ body {
 	font-family: sans-serif;
 }
 
+.chart div { margin: 1px; bottom: 0; position: absolute; display: inline-block; background-color: #767676;
+}
+
 svg {
   width: 100%;
   height: 100%;
