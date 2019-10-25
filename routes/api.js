@@ -81,6 +81,7 @@ router.get('/person', async (req, res, next) => {
             affiliation: person.affiliation,
             email: person.email,
             publicationList: publicationList,
+            title: person.title
         }
         res.status(200).json(body);
     } catch (e) {
@@ -198,6 +199,7 @@ router.get('/search/experts', async (req, res) => {
                 researchInterests: person.interests.split(', '),
                 affiliation: person.affiliation,
                 email: person.email,
+                title: person.title
             }
         })
         console.log(personList)
