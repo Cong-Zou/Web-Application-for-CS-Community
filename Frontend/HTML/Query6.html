@@ -1,0 +1,31 @@
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container">
+	<div class="col-12">
+        <!-- <button ng-click="showAllQueries()">Back</button> -->
+        <h3 style="text-align: center;">Query 6</h2>
+        <h4>Given a paper, show a knowledge card summarizing its publication information (metadata) and citation data.</h2>
+        <div class="idxcontainer">
+            <input type="text" name="search" ng-model="search.paper" placeholder="Paper Name" id="paper">
+            <button type="submit" class="btn btn-search" ng-click="getResult()">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div ng-switch="changePCView">
+            <div ng-switch-when="showResult">
+                 <div style=" margin: 0 auto; width: 80%; width: 500px; margin-top: 40px; border-color: black; border-style: solid; padding: 10px;" id="resultContainer">
+                    <h4 style="text-align: center;">{{result.title}}</h3>
+                    <p><b>year:</b> {{result.year}}</p>
+                    <p><b>Venue:</b> {{result.venue}}</p>
+                    <p><b>Volume:</b> {{result.volume}}</p>
+                    <p><b>Pages:</b> {{result.pages}}</p>
+                    <p><b>Authors:</b></p>
+                    <p ng-repeat="author in result.authors track by $index">{{author}}</p>
+                    <p><b>Citations:</b></p>
+                    <p ng-repeat="citation in result.citations track by $index">{{citation}}</p>
+                 </div>
+        
+            </div>
+          </div>  
+	</div>
+</div>

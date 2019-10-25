@@ -1,0 +1,37 @@
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<div class="container">
+	<div class="col-12">
+        <!-- <button ng-click="showAllQueries()">Back</button> -->
+        <h3 style="text-align: center;">Query 4</h2>
+        <h4>Given some keywords, search for researchers who are experts in the field (i.e., published significantly in the fields).</h2>
+        <div class="idxcontainer">
+            <input type="text" name="search" ng-model="search.keywords" placeholder="Keywords" id="keywords">
+            <button type="submit" class="btn btn-search" ng-click="getResult()">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div ng-switch="changePCView">
+            <div ng-switch-when="showResult">
+                <table>
+                 <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col" style="text-align:center">Image</th>
+                        <th scope="col" style="text-align:center">Affiliation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="expert in experts">
+                        <td>{{expert.name}}</td>
+                        <td ng-if="expert.photoUrl != 'null'" align="center"><img ng-src="{{expert.photoUrl}}"></td>
+                        <td ng-if="expert.photoUrl == 'null'" align="center"></td>
+                        <td align="center">{{expert.affiliation}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            </div>
+          </div>  
+	</div>
+</div>
