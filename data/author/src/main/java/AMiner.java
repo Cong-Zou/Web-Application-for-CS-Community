@@ -13,7 +13,6 @@ import java.util.Scanner;
 
 public class AMiner {
     private final String ENDPOINT_BASIC = "https://api.aminer.org/api/search/person";
-    // private final String ENDPOINT_ADVANCED = "https://api.aminer.org/api/search/person/advanced";
 
     public void collectAuthorInfo(Author author) {
         String response = searchAuthor(author);
@@ -25,13 +24,6 @@ public class AMiner {
 
         try {
             URL url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
-//            if (author.hasAffiliation()) {
-//                url = new URL(ENDPOINT_ADVANCED
-//                        + "?name=" + URLEncoder.encode(name, "UTF-8")
-//                        + "&org=" + URLEncoder.encode(author.getAffiliation(), "UTF-8"));
-//            } else {
-//                url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
-//            }
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -124,7 +116,7 @@ public class AMiner {
                 try {
                     String photoUrl = result.getString("avatar");
                     if (photoUrl != null && !photoUrl.contains("default")) {
-                        attributes.put("photo", "https" + photoUrl);
+                        attributes.put("photo", "https:" + photoUrl);
                     }
                 } catch (JSONException e) {
                     System.out.println("No photo info from AMiner for " + authorName);
