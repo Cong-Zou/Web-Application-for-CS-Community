@@ -74,8 +74,8 @@ angular.module("sose-research-community")
 
 			var yScale = d3.scaleLinear()
 				.domain([0,d3.max(data,function(d,i) {return d.numAuths})])
-				//.range([chartArea.height,0]).nice();
-				.range([0,chartArea.height]).nice();
+				.range([chartArea.height,0]).nice();
+				//.range([0,chartArea.height]).nice();
 
 			var xScale = d3.scaleBand()
 				.domain(data.map(function(d) {return d.volume}))
@@ -87,6 +87,12 @@ angular.module("sose-research-community")
 				.attr('transform', 'translate(' + padding.left + ',' + (chartArea.height + padding.top) + ')')
 				.call(d3.axisBottom(xScale));
 
+			// text label for the x axis
+  			svg.append("text")             
+      			.attr("transform","translate(" + (chartArea.width/2) + " ," + (chartArea.height + 50) + ")")
+      			.style("text-anchor", "middle")
+      			.text("volume");
+
 				console.log(svg);
 
 			var yAxisFn = d3.axisLeft(yScale);
@@ -95,6 +101,15 @@ angular.module("sose-research-community")
 				.attr('transform', 'translate(' + padding.left + ',' + padding.top + ')')
 			yAxisFn(yAxis);
 
+			// text label for the y axis
+			  svg.append("text")
+			      .attr("transform", "rotate(-90)")
+			      .attr("y", 0-5)
+			      .attr("x",(0 - chartArea.height/2))
+			      .attr("dy", "1em")
+			      .style("text-anchor", "middle")
+			      .text("Author Count");   
+
 			var rectGrp = svg.append("g")
 				.attr('transform', 'translate(' + padding.left + ',' + padding.top + ')');
 
@@ -102,14 +117,14 @@ angular.module("sose-research-community")
 				.append("rect")
 				.attr("width",xScale.bandwidth())
 				.attr("height", function(d,i){
-					//return chartArea.height - yScale(d.numAuths);
-					return yScale(d.numAuths);
+					return chartArea.height - yScale(d.numAuths);
+					//return yScale(d.numAuths);
 				})
 				.attr("x",function(d,i){
 					return xScale(d.volume);
 				})
 				.attr("y",function(d,i){
-					return xScale(d.numAuths);
+					return yScale(d.numAuths);
 				})
 				// .attr("fill",function(d,i){
 				// 	return colors[i];
