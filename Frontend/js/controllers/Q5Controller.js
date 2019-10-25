@@ -11,13 +11,12 @@ angular.module("sose-research-community")
 		var year = document.getElementById("year").value;
 		$http.get("https://diwd-team7.herokuapp.com/api/search/focused_topics?channelName=" + channel + "&year=" + year).then(function(response){
 			console.log(response.data);
-			var topicArr = new Array();
+			$scope.topicArr = new Array();
 			for (var i=0; i < response.data.length; i++){
-				topicArr.push(response.data[i][0]);
+				$scope.topicArr.push(response.data[i][0]);
 			}
-			$scope.topics = topicArr;
 			
-			$scope.changePCView = "result";
+			$scope.changePCView = "showResult";
 		});
 	}
 

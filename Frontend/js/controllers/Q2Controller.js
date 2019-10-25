@@ -24,14 +24,14 @@ angular.module("sose-research-community")
 				}
 			}
 
-			var arr = new Array();
+			$scope.arr = new Array();
 			var keys = map.keys();
 			for (var key of keys){
 				var val = map.get(key);
 				var entry = {year: key, numPubs: val};
-				arr.push(entry);
+				$scope.arr.push(entry);
 			}
-			console.log(arr);
+			console.log($scope.arr);
 
 
   

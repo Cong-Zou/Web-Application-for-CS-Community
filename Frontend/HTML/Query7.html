@@ -3,26 +3,28 @@
 <div class="container">
 	<div class="col-12">
         <!-- <button ng-click="showAllQueries()">Back</button> -->
-        <h2 style="text-align: center;">Query 7</h2>
-        <h2>Given the name of a researcher, generate a graph* showing the direct collaboration network of the author (her all co-authors).</h2>
+        <h3 style="text-align: center;">Query 7</h2>
+        <h4>Given the name of a researcher, generate a graph* showing the direct collaboration network of the author (her all co-authors).</h2>
         <div class="idxcontainer">
-            <input type="text" name="search" ng-model="search.paper" placeholder="Paper Name">
-            <button type="submit" class="btn btn-search">
+            <input type="text" name="search" ng-model="search.researcher" placeholder="Researcher Name" id="researcher">
+            <button type="submit" class="btn btn-search" ng-click="getResult()">
                 <i class="fa fa-search"></i>
             </button>
         </div>
         <div ng-switch="changePCView">
             <div ng-switch-when="showResult">
-                 <div class="form-group text-center">
-                    <select ng-model="newMsqRecip" class="form-control" id="receiverName">
-                        <option value="" selected disabled>Select the user you'd like to chat with</option>
-                        <option ng-repeat="ou in onlineUsers track by $index">{{ou}}</option>
-                    </select>
-                    <textarea style="margin-top: 10px; margin-bottom: 10px;" rows="4" cols="50" class="form-control" placeholder="Enter message here" ng-model="newmessage" id="newMessageTxt">
-                    </textarea>
-                    <button style="background-color: #80aaff; border-radius: 10px;" class="btn" ng-click="sendNewPrivMessage()">Send</button>
-                    <button style="background-color: black; border-radius: 10px;" class="btn" ng-click="cancel()">Cancel</button>
-                </div>
+                 <table border="1" style="margin-top: 20px;">
+                 <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Collaborator</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="collaborator in collaborators">
+                        <td>{{collaborator}}</td>
+                    </tr>
+                </tbody>
+            </table>
         
             </div>
           </div>  

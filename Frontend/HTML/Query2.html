@@ -4,8 +4,8 @@
 <div class="container">
 	<div class="col-12">
         <!-- <button ng-click="showAllQueries()">Back</button> -->
-        <h2 style="text-align: center;">Query 2</h2>
-        <h2>Given a time period of years for an author, generate a histogram showing her publications per year in the field. </h2>
+        <h3 style="text-align: center;">Query 2</h2>
+        <h4>Given a time period of years for an author, generate a histogram showing her publications per year in the field. </h2>
         <div class="idxcontainer">
             <input type="text" name="search" ng-model="search.author" placeholder="Author Name" id="author">
             <input type="text" name="stYear" ng-model="search.yearStart" placeholder="Start Year (XXXX)" id="startYear">
@@ -16,8 +16,21 @@
         </div>
         <div ng-switch="changePCView">
             <div ng-switch-when="showResult">
-                 <div id="graph">
-                    <svg></svg>
+                 <div id="content">
+                    <table border="1" style="margin-top: 40px;">
+                 <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Year</th>
+                        <th scope="col" style="text-align:center">Number of Publications</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="entry in arr">
+                        <td>{{entry.year}}</td>
+                        <td align="center">{{entry.numPubs}}</td>
+                    </tr>
+                </tbody>
+            </table>
                  </div>
         
             </div>
