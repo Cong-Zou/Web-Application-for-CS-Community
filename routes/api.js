@@ -3,6 +3,8 @@ var router = express.Router();
 
 const neo4j = require('neo4j-driver').v1;
 
+const USELESS_WORDS = new Set(['in', 'the', 'and', 'to', 'a', 'of', 'by', 'an', 'can', 'from', 'this', 'with', 'is', 'are'])
+
 let neo4j_addr = process.env.NEO4J_URI || "";
 const user = neo4j_addr.split('|')[0];
 const password = neo4j_addr.split('|')[1];
@@ -218,7 +220,7 @@ router.get('/search/focused_topics', async (req, res) => {
         console.log('channelName', channelName);
 
         const result = await session.run(
-            `Match (p2:Paper) where p2.venue=$channelName and p2.year=$year return p2.title as title`,
+            `Match (p2:Paper) where p2.venue=$channelName and p2.year=$year return p2.title as title, p2.abstract as abstract`,
             {
                 channelName: channelName,
                 year: year
@@ -234,20 +236,20 @@ router.get('/search/focused_topics', async (req, res) => {
 
         result.records.forEach(p => {
             const title = p.get('title');
-            title.split(' ').forEach(word => {
+            const abstract = p.get('abstract');
+            (abstract + ' ' + title).split(' ').forEach(word => {
+                if (USELESS_WORDS.has(word.toLowerCase())) {
+                    return;
+                }
                 if (!countMap.has(word)) {
                     countMap.set(word, 0);
                 }
                 countMap.set(word, countMap.get(word) + 1);
             })
         })
-        countMap[Symbol.iterator] = function* () {
-            yield* [...this.entries()].sort((a, b) => (a[1] - b[1] || b[0].length - a[0].length));
-        }
+        const sortedList = [...countMap.entries()].sort((a, b) => b[1] - a[1] || b[0].length - a[0].length);
 
-
-        const body = [...countMap].slice(0, 20);
-        console.log(body)
+        const body = sortedList.slice(0, 20);
         res.status(200).json(body);
     } catch (e) {
         console.log('error', e);
