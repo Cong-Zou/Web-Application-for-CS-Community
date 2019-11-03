@@ -14,6 +14,9 @@ public class Database {
     private final Driver driver = GraphDatabase.driver("bolt://129.146.189.33:7687",
             AuthTokens.basic("neo4j", "diwd-team7"));
 
+//    private final Driver driver = GraphDatabase.driver("bolt://localhost:7687",
+//            AuthTokens.basic("neo4j", "123456"));
+
 
     public void BuildDatabase(final List<Paper> listPapers, final List<Author> listAuthors, final HashMap<String, String> writesMap, final HashMap<String, String> citesMap) throws Exception {
         try {
@@ -55,7 +58,13 @@ public class Database {
                         StatementResult result = tx.run(cypher, parameters("doi1", doi1, "doi2", doi2));
                     }
 
-                    return "Done. The neo4j database has been built successfully!";
+                    //create collaborates relation edges
+                    System.out.println("Building collaborates relations...");
+                    String cyphter = "match (a1: Author) - [:Writes] -> (paper: Paper) <- [:Writes] - (a2: Author) " +
+                            "create (a1) - [:Collaborates] -> (a2)";
+                    StatementResult result = tx.run(cyphter);
+
+                    return "Done. The neo4j database hasbeen built successfully!";
                 }
             });
             System.out.println(createInfo);
