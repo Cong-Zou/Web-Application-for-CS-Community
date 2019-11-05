@@ -47,6 +47,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		templateUrl: '../HTML/Query7.html',
 		controller: "Q7Controller"
 	})
+	.state('query27', {
+		url: '/query27',
+		templateUrl: '../HTML/Query27.html',
+		controller: "Q27Controller"
+	})
 	.state('home', {
 		url: '/home',
 		templateUrl: '../HTML/index.html',

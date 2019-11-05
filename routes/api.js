@@ -269,8 +269,11 @@ router.get('/collaboration', async (req, res) => {
 
         let authors = new Map();
         let links = [];
+        let nodes = [];
         let count = 1;
+        nodes.push({id: count, name: name, group: 1});
         authors.set(name, count++);
+
 
         if (result.records.length > 0) {
             for (let i = 0; i < result.records.length; i++) {
@@ -280,6 +283,7 @@ router.get('/collaboration', async (req, res) => {
                     if (coauthor.length > 0 && coauthor.valueOf() !== "null".valueOf()) {
                         // node for graph
                         if (authors.get(coauthor) === undefined) {
+                            nodes.push({id: count, name: coauthor, group: 2});
                             authors.set(coauthor, count++);
                         }
 
@@ -306,6 +310,7 @@ router.get('/collaboration', async (req, res) => {
                                 if (coauthor.length > 0 && coauthor.valueOf() !== "null".valueOf()) {
                                     // node for graph
                                     if (authors.get(coauthor) === undefined) {
+                                        nodes.push({id: count, name: coauthor, group: 3});
                                         authors.set(coauthor, count++);
                                     }
 
@@ -318,11 +323,6 @@ router.get('/collaboration', async (req, res) => {
                     }
                 }
             }
-        }
-
-        let nodes = [];
-        for (const [authorName, index] of authors.entries()) {
-            nodes.push({id: index, name: authorName});
         }
 
         const response = {nodes: nodes, links: links};
