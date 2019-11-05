@@ -1,6 +1,6 @@
 "use strict";
 angular.module("sose-research-community")
-  .controller("Q27Controller", function($scope, $http, $timeout) {
+  .controller("S2Q7Controller", function($scope, $http, $timeout) {
     $scope.changePCView = "";
 
     $scope.getResult = function(){
