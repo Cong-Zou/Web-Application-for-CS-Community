@@ -258,4 +258,81 @@ router.get('/search/focused_topics', async (req, res) => {
 });
 
 
+// Query 2.7
+router.get('/collaboration', async (req, res) => {
+    try {
+        const name = req.query.name;
+        const result = await session.run(
+          `MATCH (a:Author {name: $name})-[:Collaborates]->(o:Author) RETURN o.name AS coauthor`,
+          {name: name}
+        );
+
+        let authors = new Map();
+        let links = [];
+        let count = 1;
+        authors.set(name, count++);
+
+        if (result.records.length > 0) {
+            for (let i = 0; i < result.records.length; i++) {
+                const record = result.records[i];
+                if (record !== undefined) {
+                    const coauthor = record.get('coauthor');
+                    if (coauthor.length > 0 && coauthor.valueOf() !== "null".valueOf()) {
+                        // node for graph
+                        if (authors.get(coauthor) === undefined) {
+                            authors.set(coauthor, count++);
+                        }
+
+                        // link for graph
+                        const authorIndex = authors.get(name);
+                        const coauthorIndex = authors.get(coauthor);
+                        links.push({source: authorIndex, target: coauthorIndex});
+                    }
+                }
+            }
+
+            for (const [coauthorName, index] of authors.entries()) {
+                if (coauthorName.valueOf() !== name.valueOf()) {
+                    const result2 = await session.run(
+                      `MATCH (a:Author {name: $name})-[:Collaborates]->(o:Author) RETURN o.name AS coauthor`,
+                      {name: coauthorName}
+                    );
+
+                    if (result2.records.length > 0) {
+                        for (let j = 0; j < result2.records.length; j++) {
+                            const record = result2.records[j];
+                            if (record !== undefined) {
+                                const coauthor = record.get('coauthor');
+                                if (coauthor.length > 0 && coauthor.valueOf() !== "null".valueOf()) {
+                                    // node for graph
+                                    if (authors.get(coauthor) === undefined) {
+                                        authors.set(coauthor, count++);
+                                    }
+
+                                    // link for graph
+                                    const coauthorIndex = authors.get(coauthor);
+                                    links.push({source: index, target: coauthorIndex});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let nodes = [];
+        for (const [authorName, index] of authors.entries()) {
+            nodes.push({id: index, name: authorName});
+        }
+
+        const response = {nodes: nodes, links: links};
+        console.log(response);
+        res.status(200).json(response);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
+
 module.exports = router;
