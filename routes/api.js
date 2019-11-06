@@ -258,4 +258,47 @@ router.get('/search/focused_topics', async (req, res) => {
 });
 
 
+router.get('/paper/top_k', async (req, res) => {
+    try {
+        const keywords = req.query.keywords;
+        const keywordList = keywords.split(',');
+        const kNum = +req.query.k;
+
+        const result = await session.run(
+            `with $keywordList as wordList unwind wordList as word with word Match(p:Paper) where (p.abstract+' '+p.title) CONTAINS word return p as paper, [(author:Author)-[:Writes]->(p:Paper)|author.name] as authors limit $k`,
+            {
+                keywordList: keywordList,
+                k: kNum
+            }
+        );
+        console.log(result.records);
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const paperList = result.records.map(singleRecord => {
+            const paper = singleRecord.get('paper').properties;
+            const authors = singleRecord.get('authors');
+            const body = {
+                title: paper.title,
+                authors: authors,
+                year: paper.year,
+                venue: paper.venue,
+                abstract: paper.abstract,
+                pages: paper.pages,
+                citations: null,
+                volume: paper.volume
+            };
+            return body
+        })
+
+        // console.log(result.records)
+        res.status(200).json(paperList);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
 module.exports = router;
