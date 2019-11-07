@@ -463,7 +463,7 @@ router.get('/map/keywords', async (req, res) => {
         const keywordList = keywords.split(/(\s+)/);
 
         const result = await session.run(
-            `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abs CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
+            `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abstract CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
             {
                 keywordList: keywordList,
                 country: country

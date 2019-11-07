@@ -10,7 +10,8 @@
         <h3 style="text-align: center;">Query 2.8</h3>
         <h4>Given some keywords, generate a graph of top k related papers together with their authors.</h4>
         <div class="idxcontainer">
-            <input type="text" name="search" ng-model="search.researcher" placeholder="Researcher Name" id="researcher">
+            <input type="text" name="keywords" ng-model="search.keywords" placeholder="keywords" id="keywords">
+            <input type="text" name="kNum" ng-model="search.kNum" placeholder="K num, default is 10" id="kNum">
             <button type="submit" class="btn btn-search" ng-click="getResult()">
                 <i class="fa fa-search"></i>
             </button>
