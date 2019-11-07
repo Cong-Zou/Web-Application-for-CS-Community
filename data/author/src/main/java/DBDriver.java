@@ -3,6 +3,8 @@ import org.neo4j.driver.v1.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.neo4j.driver.v1.Values.parameters;
+
 public class DBDriver implements AutoCloseable {
     private final Driver driver;
 
@@ -25,16 +27,14 @@ public class DBDriver implements AutoCloseable {
         }
     }
 
-    public List<String> getPeople()
-    {
+    public List<String> getPeople() {
         try ( Session session = driver.session() )
         {
             return session.readTransaction(tx -> matchPersonNodes( tx ));
         }
     }
 
-    private static List<String> matchPersonNodes( Transaction tx )
-    {
+    private List<String> matchPersonNodes( Transaction tx ) {
         List<String> people = new ArrayList<>();
         StatementResult result = tx.run( "MATCH (a:Author) RETURN a.name" );
         while (result.hasNext())
@@ -43,6 +43,60 @@ public class DBDriver implements AutoCloseable {
             people.add(author.get(0).asString());
         }
         return people;
+    }
+
+    public List<String> getPapers() {
+        try ( Session session = driver.session() )
+        {
+            return session.readTransaction(tx -> matchPaperNodes( tx ));
+        }
+    }
+
+    private List<String> matchPaperNodes( Transaction tx ) {
+        List<String> papers = new ArrayList<>();
+        StatementResult result = tx.run( "MATCH (p:Paper) RETURN p.title" );
+        while (result.hasNext())
+        {
+            Record paper = result.next();
+            papers.add(paper.get(0).asString());
+        }
+        return papers;
+    }
+
+    public List<String> getPaperAuthorsAffiliations(String paperTitle) {
+        try ( Session session = driver.session() )
+        {
+            return session.readTransaction(tx -> matchPaperAuthorNodes(tx, paperTitle));
+        }
+    }
+
+    private List<String> matchPaperAuthorNodes(Transaction tx, String paperTitle) {
+        List<String> affiliations = new ArrayList<>();
+        StatementResult result = tx.run(
+                "MATCH (p:Paper {title: $title})<-[:Writes]-(a:Author) RETURN a.affiliation",
+                parameters("title", paperTitle) );
+        while (result.hasNext())
+        {
+            Record record = result.next();
+            affiliations.add(record.get(0).asString());
+        }
+        return affiliations;
+    }
+
+    public void setPublicationCountryAndLatLng(String title, String country, double lat, double lng) {
+        try ( Session session = driver.session() )
+        {
+            String response = session.writeTransaction(tx -> {
+                StatementResult result = tx.run( "MATCH (p:Paper {title: $title}) " +
+                                "SET p.country = $country " +
+                                "SET p.lat = $lat " +
+                                "SET p.lng = $lng " +
+                                "RETURN p.title + ' ' + p.country + ' ' + p.lat + ' ' + p.lng",
+                        parameters("title", title, "country", country, "lat", lat, "lng", lng));
+                return result.next().get(0).asString();
+            });
+            System.out.println(response);
+        }
     }
 
     @Override
