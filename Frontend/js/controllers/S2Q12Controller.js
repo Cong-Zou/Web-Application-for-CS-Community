@@ -4,39 +4,36 @@ angular.module("sose-research-community")
   .controller("S2Q12Controller", function($scope, $http, $timeout) {
 
     $scope.getResult = function() {
-      const countryIndex = document.getElementById("country").selectedIndex;
-      const country = geocode[countryIndex];
-      const keywords = document.getElementById("keywords").value;
+      const country = document.getElementById("country");
+      const countryIndex = country.selectedIndex;
+      const countryGeocode = geocode[countryIndex];
+      const countryName = country.value;
+      const keywords = document.getElementById("keywords").value.trim();
 
-      console.log(keywords, country.name, country.location.lat, country.location.lng);
+      console.log(keywords, countryGeocode.name, countryGeocode.location.lat, countryGeocode.location.lng);
 
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
-        center: new google.maps.LatLng(country.location.lat, country.location.lng),
+        center: new google.maps.LatLng(countryGeocode.location.lat, countryGeocode.location.lng),
         mapTypeId: 'terrain'
       });
 
-      // $http.get("http://localhost:3000/api/collaboration?country=" + country + "&keywords=" + keywords).then(function(response){
-      //   console.log(response.data);
-      //
-      //
-      // });
+      $http.get("http://localhost:3000/api/map/keywords?country=" + countryName + "&keywords=" + keywords).then(function(response){
+        console.log(response.data);
+        const results = response.data;
 
-      var results = [{lat: 19.2218342, long: -155.4438324, title: "pub1"},
-        {lat: 40.8443, long: -116.2005, title: "pub2"},
-        {lat: 19.4619999, long: -155.5868378, title: "pub3"}];
-
-      // Loop through the results array and place a marker for each
-      // set of coordinates.
-      for (var i = 0; i < results.length; i++) {
-        var publication = results[i];
-        var latLng = new google.maps.LatLng(publication.lat,publication.long);
-        var marker = new google.maps.Marker({
-          position: latLng,
-          map: map,
-          title: publication.title
-        });
-      }
+        // Loop through the results array and place a marker for each
+        // set of coordinates.
+        for (var i = 0; i < results.length; i++) {
+          var publication = results[i];
+          var latLng = new google.maps.LatLng(publication.lat,publication.lng);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: map,
+            title: publication.title
+          });
+        }
+      });
     }
 
   });

@@ -16,7 +16,7 @@ angular.module("sose-research-community")
         mapTypeId: 'terrain'
       });
 
-      // $http.get("http://localhost:3000/api/collaboration?channel=" + channel + "&startYear=" + start + "&endYear=" + end).then(function(response){
+      // $http.get("http://localhost:3000/api/map/channel?channel=" + channel + "&startYear=" + start + "&endYear=" + end).then(function(response){
       //   console.log(response.data);
       //
       //

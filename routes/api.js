@@ -302,7 +302,8 @@ router.get('/paper/top_k', async (req, res) => {
 });
 
 
-// Query 2.7
+// Query 2.7 - Given the name of a researcher, generate a graph* showing a multi-depth
+// collaboration network of the author (her co-authors and their co-authors).
 router.get('/collaboration', async (req, res) => {
     try {
         const name = req.query.name;
@@ -372,6 +373,44 @@ router.get('/collaboration', async (req, res) => {
         const response = {nodes: nodes, links: links};
         console.log(response);
         res.status(200).json(response);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
+// Query 2.12 - Given some geographical area (e.g., country) and some keywords,
+// generate a graph on Google map the publications on the topic,
+// whose authors come from the geographical area (at least one or more authors).
+router.get('/map/keywords', async (req, res) => {
+    try {
+        const country = req.query.country;
+        const keywords = req.query.keywords;
+        const keywordList = keywords.split(/(\s+)/);
+
+        const result = await session.run(
+          `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abs CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
+          {
+              keywordList: keywordList,
+              country: country
+          }
+        );
+
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const publicationList = result.records.map(record => {
+            return {
+                title: record.get("p.title"),
+                lat: record.get("p.lat"),
+                lng: record.get("p.lng")
+            };
+        });
+
+        console.log(publicationList);
+        res.status(200).json(publicationList);
     } catch (e) {
         console.log('error', e);
         res.status(400).json({error: e});
