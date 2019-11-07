@@ -396,10 +396,38 @@ router.get('/map/keywords', async (req, res) => {
           }
         );
 
-        if (result.records.length === 0) {
-            res.sendStatus(404);
-            return;
-        }
+        const publicationList = result.records.map(record => {
+            return {
+                title: record.get("p.title"),
+                lat: record.get("p.lat"),
+                lng: record.get("p.lng")
+            };
+        });
+
+        console.log(publicationList);
+        res.status(200).json(publicationList);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
+// Query 2.13 - Given a publication channel name (journal or conference) and a time frame,
+// showcase in a map the publications distribution.
+router.get('/map/channel', async (req, res) => {
+    try {
+        const channel = req.query.channel;
+        const startYear = req.query.startYear;
+        const endYear = req.query.endYear;
+
+        const result = await session.run(
+          `MATCH (p:Paper) WHERE p.venue CONTAINS $channel AND p.year >= $startYear AND p.year <= $endYear AND p.lat IS NOT NULL RETURN p.title, p.lat, p.lng`,
+          {
+              channel: channel,
+              startYear: startYear,
+              endYear: endYear
+          }
+        );
 
         const publicationList = result.records.map(record => {
             return {
