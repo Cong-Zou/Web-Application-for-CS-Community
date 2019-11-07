@@ -302,6 +302,80 @@ router.get('/paper/top_k', async (req, res) => {
 });
 
 
+router.get('/paper/categorize', async (req, res) => {
+        try {
+            const keywords = req.query.keywords || '';
+            const keywordList = keywords.split(',');
+            const startYear = +req.query.startYear;
+            const endYear = +req.query.endYear;
+            const channelName = req.query.channelName || '%';
+
+
+            let result;
+            if (keywords) {
+                result = await session.run(
+                    `with $keywordList as wordList unwind wordList as word with word Match(p:Paper) where (p.abstract+' '+p.title) CONTAINS word and ('%'=$channelName or p.venue=$channelName) and toInteger(p.year)<=$endYear and toInteger(p.year)>=$startYear return p as paper`,
+                    {keywordList: keywordList, startYear: startYear, endYear: endYear, channelName: channelName}
+                );
+            } else {
+                result = await session.run(
+                    `match (p:Paper) where ('%'=$channelName or p.venue=$channelName) and toInteger(p.year)<=$endYear and toInteger(p.year)>=$startYear return p as paper`,
+                    {startYear: startYear, endYear: endYear, channelName: channelName}
+                );
+            }
+
+
+            console.log(result.records);
+            if (result.records.length === 0) {
+                res.sendStatus(404);
+                return;
+            }
+
+            const categories = [
+                {name: 'web', papers: []},
+                {name: 'system', papers: []},
+                {name: 'cloud', papers: []},
+                {name: 'mobile', papers: []},
+                {name: 'algorithm', papers: []},
+                {name: 'others', papers: []}
+            ];
+
+            const paperList = result.records.map(singleRecord => {
+                const paper = singleRecord.get('paper').properties;
+                const body = {
+                    title: paper.title,
+                    authors: [null],
+                    year: paper.year,
+                    venue: paper.venue,
+                    abstract: paper.abstract,
+                    pages: paper.pages,
+                    citations: null,
+                    volume: paper.volume
+                };
+                return body
+            })
+            paperList.forEach(paper => {
+                let minCnt = 100000000;
+                let curIndex = categories.length - 1;
+                for (let i = 0; i < categories.length - 1; i++) {
+                    if (paper.abstract.toLowerCase().includes(categories[i].name) && categories[i].papers.length < minCnt) {
+                        minCnt = categories[i].papers.length;
+                        curIndex = i;
+                    }
+                }
+                categories[curIndex].papers.push(paper);
+            });
+            // console.log(result.records)
+            res.status(200).json(categories);
+        } catch
+            (e) {
+            console.log('error', e);
+            res.status(400).json({error: e});
+        }
+    }
+);
+
+
 // Query 2.7 - Given the name of a researcher, generate a graph* showing a multi-depth
 // collaboration network of the author (her co-authors and their co-authors).
 router.get('/collaboration', async (req, res) => {
@@ -389,11 +463,11 @@ router.get('/map/keywords', async (req, res) => {
         const keywordList = keywords.split(/(\s+)/);
 
         const result = await session.run(
-          `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abs CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
-          {
-              keywordList: keywordList,
-              country: country
-          }
+            `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abs CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
+            {
+                keywordList: keywordList,
+                country: country
+            }
         );
 
         const publicationList = result.records.map(record => {
@@ -421,12 +495,12 @@ router.get('/map/channel', async (req, res) => {
         const endYear = req.query.endYear;
 
         const result = await session.run(
-          `MATCH (p:Paper) WHERE p.venue CONTAINS $channel AND p.year >= $startYear AND p.year <= $endYear AND p.lat IS NOT NULL RETURN p.title, p.lat, p.lng`,
-          {
-              channel: channel,
-              startYear: startYear,
-              endYear: endYear
-          }
+            `MATCH (p:Paper) WHERE p.venue CONTAINS $channel AND p.year >= $startYear AND p.year <= $endYear AND p.lat IS NOT NULL RETURN p.title, p.lat, p.lng`,
+            {
+                channel: channel,
+                startYear: startYear,
+                endYear: endYear
+            }
         );
 
         const publicationList = result.records.map(record => {
