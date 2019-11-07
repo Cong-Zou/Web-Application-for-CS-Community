@@ -68,6 +68,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		templateUrl: './HTML/S2Q13.html',
 		controller: "S2Q13Controller"
 	})
+	.state('s2query1', {
+		url: '/s2/query1',
+		templateUrl: './HTML/S2Q1.html',
+		controller: "S2Q1Controller"
+	})
 	.state('home', {
 		url: '/home',
 		templateUrl: './HTML/index.html',
