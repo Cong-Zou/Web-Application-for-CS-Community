@@ -13,7 +13,9 @@ angular.module("sose-research-community")
 			console.log(response.data);
 			$scope.topicArr = new Array();
 			for (var i=0; i < response.data.length; i++){
-				$scope.topicArr.push(response.data[i][0]);
+				if (response.data[i][0] != "null"){
+					$scope.topicArr.push(response.data[i][0]);
+				}
 			}
 			
 			$scope.changePCView = "showResult";
