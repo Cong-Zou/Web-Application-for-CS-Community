@@ -10,8 +10,8 @@
         <h3 style="text-align: center;">Query 2.7</h3>
         <h4>Given the name of a researcher, generate a graph* showing a multi-depth collaboration network of the author (her co-authors and their co-authors).</h4>
         <div class="idxcontainer">
-            <input type="text" name="search" ng-model="search.researcher" placeholder="Researcher Name" id="researcher">
-            <button type="submit" class="btn btn-search" ng-click="getResult()">
+            <input id="researcher" placeholder="Researcher Name" type="text">
+            <button class="btn btn-search" ng-click="getResult()" type="submit">
                 <i class="fa fa-search"></i>
             </button>
         </div>
@@ -31,7 +31,7 @@
                         font-size: 10px;
                     }
                 </style>
-                <svg width="1260" height="666" id="graph"></svg>
+                <svg width="1260" height="750" id="graph"></svg>
             </div>
         </div>
     </div>

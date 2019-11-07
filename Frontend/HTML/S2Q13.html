@@ -1,0 +1,32 @@
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head>
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+      height: 600px;
+      margin-top: 50px;
+      margin-bottom: 50px;
+    }
+  </style>
+  <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD9x4lgdZ2gzPF8r4Yo1YybNqWYLOtrB8k">
+  </script>
+</head>s
+<div class="container">
+  <div class="col-12">
+    <!-- <button ng-click="showAllQueries()">Back</button> -->
+    <h3 style="text-align: center;">Query 2.13</h3>
+    <h4>Given a publication channel name (journal or conference) and a time frame, showcase in a map the publications distribution.</h4>
+    <div class="idxcontainer">
+      <input id="channel" placeholder="Publication Channel" type="text">
+      <input id="startYear" placeholder="Start Year (XXXX)" type="text">
+      <input id="endYear" placeholder="End Year (XXXX)" type="text">
+      <button type="submit" class="btn btn-search" ng-click="getResult()">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
