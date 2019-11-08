@@ -558,7 +558,7 @@ router.get('/channel/yeartop10', async (req, res) => {
         console.log('channel year', channel, year);
 
         const result = await session.run(
-            `match (p:Paper) where p.venue=$channel and p.year=$year and p.citations<>"null" return p.title, toInteger(p.citations) as citations order by citations desc limit 20`,
+            `match (p:Paper) where p.venue=$channel and p.year=$year and p.citations<>"null" return p.title, toInteger(p.citations) as citations order by citations desc limit 10`,
             {
                 channel: channel,
                 year: year

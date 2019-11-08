@@ -29,6 +29,33 @@ together with the given author and their relationships. The authors are also sep
 with the given author as group 1, first-level authors as group 2 and second-level as group 3 to 
 distinguish them in the graph. With the returned data, the web app draws the collaboration network 
 using D3's force directed graph, with the author's names as labels.
+
+### Requirement 9
+The requirement aims to input a major publication channel (a journal or a conference) and output the
+list of the top 20 cited papers in that channel.
+The corresponding api channel/top20 which takes the channel as parameters has been built first, 
+and then we call it in the vistrail workflow tool. 
+The workflow has one input string called channel and outputs a list of tuples which consists of top 20
+cited papers' title and citation counts.
+
+
+### Requirement 10
+The requirement aims to input a major publication channel (a journal or a conference) and year frame,
+then output the list of the top 10 cited papers in that channel in that year.
+The corresponding api channel/yeartop10 which takes the channel and the year as parameters has been built first, 
+and then we call it in the vistrail workflow tool. 
+The workflow has two input strings called channel and year, and then outputs a list of tuples which consists of top 10
+cited papers' title and citation counts.
+
+### Requirement 11
+The requirement aims to input a search paper and give the recommendations on the papers people also visit.
+We could assume that citation relationship connects two papers in the similar domains, so that the citation one can be 
+the recommended ones.
+The corresponding api paper/related which takes the paper title as parameters has been built first, 
+and then we call it in the vistrail workflow tool. 
+The workflow has one input string called title, and then outputs a list of papers which have close relationships with
+the target paper.
+
 ### Requirement 12
 The workflow has two string inputs, country and keywords. The PythonSource takes in the inputs 
 and makes an API request to get the publications related to the keywords from the specified 
