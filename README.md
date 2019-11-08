@@ -9,6 +9,15 @@ This requirement asks to show the evolution of topics for a given journal in a g
 You will then get a dictionary showing the top 20 keywords for each year.
 Following this, navigate to this query in the web client and enter the same data. You will find 3 pie charts giving a visual of the keywords over these years.
 
+### Requirement 4
+This requirement need to categorize papers, input startYear and endYear(both included).
+For example: 2010, 2010 will return all papers published in 2010
+And the papers will be categorized into predefined categories.(based on the top topics)
+
+### Requirement 5
+This is similar with the requirement 4, we can provide more restriction, for example, the keyword and channel name.
+2010, 2010, collect, ICWS will return all papers published in ICWS in 2010 and contain keyword "collect".
+
 ### Requirement 6
 This requirement asks to provide a path between two authors. This requiremnt is implemented solely in vistrails. To test, open the "AdvReq6" workflow folder and open the vistrails file. For testing purposes, use the following use cases:
 	Use Case 1:
@@ -29,6 +38,10 @@ together with the given author and their relationships. The authors are also sep
 with the given author as group 1, first-level authors as group 2 and second-level as group 3 to 
 distinguish them in the graph. With the returned data, the web app draws the collaboration network 
 using D3's force directed graph, with the author's names as labels.
+
+### Requirement 8
+Input some keywords(split by ,) and k number(default is 10), it will generate the top k papers and their authors.
+
 
 ### Requirement 9
 The requirement aims to input a major publication channel (a journal or a conference) and output the
