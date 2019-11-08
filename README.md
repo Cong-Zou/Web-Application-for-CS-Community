@@ -54,3 +54,6 @@ To show the distribution of publications on a map. The client side of the web ap
 the response from the map/channel API and mark them on a map using the Google Map API. Each marker 
 represents a publication published in the given publication channel within the given time frame in 
 years.
+
+### Requirement 4.1
+Please see pdf file "Sprint2-Req4.1" in top level directory.
