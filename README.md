@@ -1,5 +1,23 @@
 # 18656-Fall-2019-Team7
 ## Sprint 2
+
+### Requirement 1
+This requirement asks to show the evolution of topics for a given journal in a given year range. To test this requirement, first start by navigating to the "AdvReq1" folder under workflows and open the vistrails file. Here you will need to provide 3 inputs: Journal, Year1 (Start), and Year2 (End). For testing purpose, use the following configuration
+	Year1: 2014
+	Year2: 2016
+	Journal: IEEE Trans. Services Computing
+You will then get a dictionary showing the top 20 keywords for each year.
+Following this, navigate to this query in the web client and enter the same data. You will find 3 pie charts giving a visual of the keywords over these years.
+
+### Requirement 6
+This requirement asks to provide a path between two authors. This requiremnt is implemented solely in vistrails. To test, open the "AdvReq6" workflow folder and open the vistrails file. For testing purposes, use the following use cases:
+	Use Case 1:
+		Author1: Chi-Feng Chen
+		Author2: Kun-Che Hsu
+	Use Case 2:
+		Author1: Sajib Mistry
+		Author2: Sea Ling
+
 ### Requirement 7
 The workflow starts with an input for author name. Then, the PythonSource calls the coauthor 
 API with the given author name. The API returns a list of the author's coauthors. Next, the 
