@@ -18,7 +18,7 @@ angular.module("sose-research-community")
         mapTypeId: 'terrain'
       });
 
-      $http.get("http://localhost:3000/api/map/keywords?country=" + countryName + "&keywords=" + keywords).then(function(response){
+      $http.get("/api/map/keywords?country=" + countryName + "&keywords=" + keywords).then(function(response){
         console.log(response.data);
         const results = response.data;
 

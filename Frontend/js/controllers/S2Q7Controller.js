@@ -6,7 +6,7 @@ angular.module("sose-research-community")
     $scope.getResult = function(){
       const researcher = document.getElementById("researcher").value;
 
-      $http.get("http://localhost:3000/api/collaboration?name=" + researcher).then(function(response){
+      $http.get("/api/collaboration?name=" + researcher).then(function(response){
         console.log(response.data);
         const graph = response.data;
 
