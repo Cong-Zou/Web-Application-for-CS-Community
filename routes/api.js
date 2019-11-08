@@ -518,4 +518,99 @@ router.get('/map/channel', async (req, res) => {
     }
 });
 
+// Query 2.9 - Given a publication channel name (journal or conference), list the top 20 cited papers
+router.get('/channel/top20', async (req, res) => {
+    try {
+        const channel = req.query.channel;
+        console.log('channel', channel);
+
+        const result = await session.run(
+            `match (p:Paper) where p.venue=$channel and p.citations<>"null" return p.title, toInteger(p.citations) as citations order by citations desc limit 20`,
+            {
+                channel: channel
+            }
+        );
+        console.log(result.records);
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const publicationList = result.records.map(record => {
+            return {
+                title: record.get("p.title"),
+                citations: record.get("citations")
+            };
+        });
+        res.status(200).json(publicationList);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
+// Query 2.10 - Given a publication channel name (journal or conference) and a year, list the top 10 cited papers
+router.get('/channel/yeartop10', async (req, res) => {
+    try {
+        const channel = req.query.channel;
+        const year = req.query.year;
+
+        console.log('channel year', channel, year);
+
+        const result = await session.run(
+            `match (p:Paper) where p.venue=$channel and p.year=$year and p.citations<>"null" return p.title, toInteger(p.citations) as citations order by citations desc limit 20`,
+            {
+                channel: channel,
+                year: year
+            }
+        );
+        console.log(result.records);
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+
+        const publicationList = result.records.map(record => {
+            return {
+                title: record.get("p.title"),
+                citations: record.get("citations")
+            };
+        });
+        res.status(200).json(publicationList);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
+// Query 2.11 - Given a paper title, list the related papers
+router.get('/paper/related', async (req, res) => {
+    try {
+        const title = req.query.title;
+        console.log('title', title);
+
+        const result = await session.run(
+            `match (p1:Paper) <- [:Cites]-(p2:Paper) where p1.title=$title return p2.title`,
+            {
+                title: title
+            }
+        );
+        console.log(result.records);
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+        const publicationList = result.records.map(record => {
+            return {
+                title: record.get("p2.title"),
+            };
+        });
+
+        res.status(200).json(publicationList);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
 module.exports = router;
