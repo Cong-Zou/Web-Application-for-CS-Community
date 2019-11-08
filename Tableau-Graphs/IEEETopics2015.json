@@ -1,0 +1,78 @@
+[
+    {
+        "word":"for",
+        "count": 38
+    },
+    {
+        "word":"Service",
+        "count": 24
+    },
+    {
+        "word":"Cloud",
+        "count": 16
+    },
+    {
+        "word":"Web",
+        "count": 15
+    },
+    {
+        "word":"Data",
+        "count": 11
+    },
+    {
+        "word":"Services",
+        "count": 18
+    },
+    {
+        "word":"Recommendation",
+        "count": 8
+    },
+    {
+        "word":"Computing",
+        "count": 7
+    },
+    {
+        "word":"Process",
+        "count": 7
+    },
+    {
+        "word":"Management",
+        "count": 6
+    },
+    {
+        "word":"Selection",
+        "count": 6
+    },
+    {
+        "word":"Selection",
+        "count": 6
+    },
+    {
+        "word":"Efficient",
+        "count": 6
+    },
+    {
+        "word":"Using",
+        "count": 6
+    },
+    {
+        "word":"Composition",
+        "count": 5
+    },
+    {
+        "word":"Dynamic",
+        "count": 5
+    },
+    {
+        "word":"Cloud",
+        "count": 5
+    },
+    {
+        "word":"Framework",
+        "count": 4
+    },
+    {
+        "word":"Approach",
+        "count": 4
+    }
+]
