@@ -1,0 +1,22 @@
+<!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"/> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<div class="container" ng-controller="S2Q1Controller">
+	<div class="col-12">
+        <!-- <button ng-click="showAllQueries()">Back</button> -->
+        <h3 style="text-align: center;">S2 Query1</h3>
+        <h4 style="text-align: center;">Show the evolution of focus topics of a journal in a given year</h4>
+        <div class="idxcontainer">
+            <input type="text" name="search" ng-model="year1" placeholder="Start Year" id="year1">
+            <input type="text" name="search" ng-model="year2" placeholder="End Year" id="year2">
+            <input type="text" name="search" ng-model="journal" placeholder="Journal Name" id="journal">
+            <button type="submit" class="btn btn-search" ng-click="getTopicData()">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div id ="topicHistograms">
+            <!-- <svg id="svg" width="600" height="300" style="margin: 40px;"></svg> -->
+            
+        </div>
+	</div>
+</div>
