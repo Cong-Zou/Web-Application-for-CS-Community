@@ -4,7 +4,7 @@ var router = express.Router();
 const neo4j = require('neo4j-driver').v1;
 
 const USELESS_WORDS = new Set(['in', 'the', 'and', 'to', 'a', 'of', 'by', 'an', 'can', 'from', 'this', 'with', 'is', 'are'])
-
+process.env.NEO4J_URI='neo4j|diwd-team7|bolt://129.146.189.33:7687'
 let neo4j_addr = process.env.NEO4J_URI || "";
 const user = neo4j_addr.split('|')[0];
 const password = neo4j_addr.split('|')[1];
@@ -263,9 +263,8 @@ router.get('/paper/top_k', async (req, res) => {
         const keywords = req.query.keywords;
         const keywordList = keywords.split(',');
         const kNum = +req.query.k;
-
         const result = await session.run(
-            `with $keywordList as wordList unwind wordList as word with word Match(p:Paper) where (p.abstract+' '+p.title) CONTAINS word return p as paper, [(author:Author)-[:Writes]->(p:Paper)|author.name] as authors limit $k`,
+            `with $keywordList as wordList unwind wordList as word with word Match (author:Author)-[:Writes]->(p:Paper) where (p.abstract+' '+p.title) CONTAINS word with p,collect(author.name) as authors return p as paper, authors limit $k`,
             {
                 keywordList: keywordList,
                 k: kNum
