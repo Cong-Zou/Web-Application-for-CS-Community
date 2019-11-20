@@ -9,6 +9,7 @@ angular.module("sose-research-community")
       $http.get("/api/collaboration?name=" + researcher).then(function(response){
         console.log(response.data);
         const graph = response.data;
+        console.log(graph)
 
         var svg = d3.select("svg"),
           width = +svg.attr("width"),
