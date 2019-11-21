@@ -619,7 +619,21 @@ router.get('/paper/related', async (req, res) => {
 
 
 const calScore = (title, abstract, keywordList) => {
-    return 4;
+    // console.log(title)
+    let res = 0;
+    const lt = title.toLowerCase();
+    const la = abstract.toLowerCase();
+    for (let i of keywordList) {
+        const li = i.toLowerCase();
+        if (lt.includes(li)) {
+            res += 2
+        }
+        if (la.includes(li)) {
+            res += 1
+        }
+    }
+    const r = res + (title.length - 20) / 30;
+    return r * r * 2;
 }
 // Query 3.14 -
 /*
