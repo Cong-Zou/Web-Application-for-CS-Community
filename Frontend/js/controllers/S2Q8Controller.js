@@ -36,7 +36,7 @@ angular.module("sose-research-community")
 
                 const option = {
                     series: [{
-                        symbolSize: 20,
+                        symbolSize: 40,
                         label: {
                             normal: {
                                 show: true
@@ -48,7 +48,7 @@ angular.module("sose-research-community")
                         data: data,
                         force: {
                             repulsion: 100,
-                            edgeLength: 45
+                            edgeLength: 60
                         },
                         edges: edges
                     }]

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!DOCTYPE html>
+<meta charset="utf-8">
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@4.1.0/dist/echarts.min.js"></script>
+
+<div class="container">
+    <div class="col-12">
+        <h3 style="text-align: center;">Query 3.14</h3>
+        <h4>14. (Counted as 2 requirements) Given some keywords, return a collection of papers that the reader may be interested in reading (sorted by relevance).
+            *Show a graph of their relationships (e.g., citation)</h4>
+        <div class="idxcontainer">
+            <input type="text" name="keywords" ng-model="search.keywords" placeholder="keywords" id="keywords">
+            <button type="submit" class="btn btn-search" ng-click="getResult()">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+        <div ng-switch="changePCView">
+            <div ng-switch-when="showResult">
+                <style>
+                    .links line {
+                        stroke: #999;
+                        stroke-opacity: 0.6;
+                    }
+                    .nodes circle {
+                        stroke: #fff;
+                        stroke-width: 1.5px;
+                    }
+                    text {
+                        font-family: sans-serif;
+                        font-size: 10px;
+                    }
+                </style>
+                <div id="echarts" style="width: 600px;height:400px;"></div>
+            </div>
+        </div>
+    </div>
+</div>

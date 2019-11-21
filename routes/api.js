@@ -4,7 +4,7 @@ var router = express.Router();
 const neo4j = require('neo4j-driver').v1;
 
 const USELESS_WORDS = new Set(['in', 'the', 'and', 'to', 'a', 'of', 'by', 'an', 'can', 'from', 'this', 'with', 'is', 'are'])
-process.env.NEO4J_URI='neo4j|diwd-team7|bolt://129.146.189.33:7687'
+process.env.NEO4J_URI = 'neo4j|diwd-team7|bolt://129.146.189.33:7687'
 let neo4j_addr = process.env.NEO4J_URI || "";
 const user = neo4j_addr.split('|')[0];
 const password = neo4j_addr.split('|')[1];
@@ -336,6 +336,10 @@ router.get('/paper/categorize', async (req, res) => {
                 {name: 'cloud', papers: []},
                 {name: 'mobile', papers: []},
                 {name: 'algorithm', papers: []},
+                {name: 'mobile', papers: []},
+                {name: 'service', papers: []},
+                {name: 'security', papers: []},
+                {name: 'software', papers: []},
                 {name: 'others', papers: []}
             ];
 
@@ -612,5 +616,78 @@ router.get('/paper/related', async (req, res) => {
         res.status(400).json({error: e});
     }
 });
+
+
+const calScore = (title, abstract, keywordList) => {
+    // console.log(title)
+    let res = 0;
+    const lt = title.toLowerCase();
+    const la = abstract.toLowerCase();
+    for (let i of keywordList) {
+        const li = i.toLowerCase();
+        if (lt.includes(li)) {
+            res += 2
+        }
+        if (la.includes(li)) {
+            res += 1
+        }
+    }
+    const r = res + (title.length - 20) / 30;
+    return r * r * 2;
+}
+// Query 3.14 -
+/*
+return: list of papers: [{title: xxxx, weight:xxxx},{title: xxxx, weight:xxxx}]
+list of edges:[{from: xxxx, to: xxxx},{from: xxxx, to: xxxx}]
+res:{ paper_list:[], edge_list:[]}
+
+ */
+router.get('/paper/interested', async (req, res) => {
+
+    try {
+        const keywords = req.query.keywords;
+        const keywordList = keywords.split(',');
+        const kNum = 100;
+        console.log('keywordList', keywordList);
+
+        const result = await session.run(
+            `with $keywordList as wordList unwind wordList as word with word Match (p1:Paper)-[:Cites]->(p2:Paper) where (p1.abstract+' '+p1.title) CONTAINS word and (p2.abstract+' '+p2.title) CONTAINS word return p1.title, p1.abstract, p2.title;`,
+            {
+                keywordList: keywordList
+            }
+        );
+        console.log(result.records);
+        if (result.records.length === 0) {
+            res.sendStatus(404);
+            return;
+        }
+        const paperMap = new Map();
+        result.records.forEach(item => {
+            const title = item._fields[0];
+            const abstract = item._fields[1];
+            paperMap.set(title, calScore(title, abstract, keywordList))
+        });
+
+        const links = result.records.map(item => {
+            const title = item._fields[0];
+            const title2 = item._fields[2];
+            return {from: title, to: title2}
+        });
+
+        const body = {
+            paperList: [...paperMap].map(i => {
+                return {title: i[0], weight: i[1]}
+            }),
+            linkList: links
+        }
+
+
+        res.status(200).json(body);
+    } catch (e) {
+        console.log('error', e);
+        res.status(400).json({error: e});
+    }
+});
+
 
 module.exports = router;
