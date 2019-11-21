@@ -1,36 +1,30 @@
 "use strict";
 angular.module("sose-research-community")
-    .controller("S2Q8Controller", function ($scope, $http, $timeout) {
+    .controller("S3Q14Controller", function ($scope, $http, $timeout) {
         $scope.changePCView = "";
 
         $scope.getResult = function () {
             const keywords = document.getElementById("keywords").value;
-            const k = document.getElementById('kNum').value || '10';
 
-            $http.get("/api/paper/top_k?keywords=" + keywords + "&k=" + k).then(function (response) {
+            $http.get("/api/paper/interested?keywords=" + keywords).then(function (response) {
                 console.log(response.data);
-                const resList = response.data;
                 const myChart = echarts.init(document.getElementById('echarts'));
 
-                const data = resList.flatMap(paper => {
-                    return [{
-                        name: paper.title, itemStyle: {
+                const paperList = response.data.paperList;
+                const linkList = response.data.linkList;
+                const data = paperList.map(paper => {
+                    return {
+                        name: paper.title,
+                        itemStyle: {
                             color: 'red'
                         }
-                    }].concat(paper.authors.map(x => {
-                        return {
-                            name: x, itemStyle: {
-                                color: 'blue'
-                            }
-                        }
-                    }));
+                    }
                 })
 
-                const edges = resList.flatMap(paper => {
-                    return paper.authors.map(author => {
-                        return {source: paper.title, target: author}
-                    })
+                const edges = linkList.map(link => {
+                    return {source: link.from, target: link.to}
                 })
+
                 console.log('data', data);
                 console.log('edges', edges);
 
@@ -48,7 +42,7 @@ angular.module("sose-research-community")
                         data: data,
                         force: {
                             repulsion: 100,
-                            edgeLength: 60
+                            edgeLength: 160
                         },
                         edges: edges
                     }]

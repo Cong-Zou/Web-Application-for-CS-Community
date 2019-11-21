@@ -87,6 +87,11 @@ app.config(function ($stateProvider, $urlRouterProvider) {
 		templateUrl: '../HTML/S2Q13.html',
 		controller: "S2Q13Controller"
 	})
+	.state('s3query14', {
+		url: '/s3/query14',
+		templateUrl: '../HTML/S3Q14.html',
+		controller: "S3Q14Controller"
+	})
 	.state('home', {
 		url: '/home',
 		templateUrl: '../HTML/index.html',
