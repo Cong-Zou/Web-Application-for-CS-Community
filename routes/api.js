@@ -613,40 +613,4 @@ router.get('/paper/related', async (req, res) => {
     }
 });
 
-// Query 2.2 - Given a research topic, form a possible research team, taking into consideration of
-// their expertise in the field, their past collaboration relationships, and their possibility of willingness to join the team.
-router.get('/team', async (req, res) => {
-    try {
-        const topic = req.query.topic;
-        const teamsize = req.query.teamsize;
-
-        console.log('topic teamsize', topic, teamsize);
-
-        const result = await session.run(
-            `match (a1:Author)-[:Collaborates]->(a2:Author) where a1.interests contains $topic and a2.interests contains $topic return a1.name, a1.href, a1.interests, count(a2) as nums order by nums desc limit $teamsize`,
-            {
-                topic: topic,
-                teamsize: teamsize
-            }
-        );
-        console.log(result.records);
-        if (result.records.length === 0) {
-            res.sendStatus(404);
-            return;
-        }
-
-        const authorList = result.records.map(record => {
-            return {
-                name: record.get("a1.name"),
-                href: record.get("a1.href"),
-                interests: record.get("a1.interests")
-            };
-        });
-        res.status(200).json(authorList);
-    } catch (e) {
-        console.log('error', e);
-        res.status(400).json({error: e});
-    }
-});
-
 module.exports = router;
