@@ -11,6 +11,14 @@ var apiRouter = require('./routes/api');
 
 var app = express();
 
+const port = process.env.PORT || 3100;
+var server = app.listen(port, () => console.log(`Listening on ${ port }`));
+app.use(express.static(path.join(__dirname, 'Frontend')));
+app.use('/node_modules',express.static('node_modules'));
+app.get('/index', (req, res) => {
+    res.sendFile( path.resolve(__dirname, 'Frontend', 'index.html'));
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -20,8 +28,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'Frontend')));
-app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
+//app.use(express.static(path.join(__dirname, 'Frontend')));
+//app.use('/node_modules', express.static(path.join(__dirname, 'node_modules')));
 app.use(cors());
 
 //app.use('/', indexRouter);

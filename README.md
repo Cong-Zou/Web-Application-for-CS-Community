@@ -1,5 +1,5 @@
 # 18656-Fall-2019-Team7
-## Sprint 2
+## Advanced Requirments
 
 ### Requirement 1
 This requirement asks to show the evolution of topics for a given journal in a given year range. To test this requirement, first start by navigating to the "AdvReq1" folder under workflows and open the vistrails file. Here you will need to provide 3 inputs: Journal, Year1 (Start), and Year2 (End). For testing purpose, use the following configuration
@@ -8,6 +8,12 @@ This requirement asks to show the evolution of topics for a given journal in a g
 	Journal: IEEE Trans. Services Computing
 You will then get a dictionary showing the top 20 keywords for each year.
 Following this, navigate to this query in the web client and enter the same data. You will find 3 pie charts giving a visual of the keywords over these years.
+
+### Requirement 3
+This requirement strives to build a connection between two given keywords. This connection in our application is formed through affiliation where the center nodes are the keywords and the attached nodes are the affiliations which focus on that area. To test this requirement, use the following configuration:
+	keyword1: software
+	keyword2: Computer Vision
+You will find that IBM T. J. Watson Research Center focuses on both areas.
 
 ### Requirement 4
 This requirement need to categorize papers, input startYear and endYear(both included).
