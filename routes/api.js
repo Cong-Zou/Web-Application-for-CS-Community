@@ -622,7 +622,7 @@ router.get('/paper/related', async (req, res) => {
 router.get('/team', async (req, res) => {
     try {
         const topic = req.query.topic;
-        const teamsize = req.query.teamsize;
+        const teamsize = +req.query.teamsize;
 
         console.log('topic teamsize', topic, teamsize);
 
