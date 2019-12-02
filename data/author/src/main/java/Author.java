@@ -1,6 +1,9 @@
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Author object to store author information
+ */
 public class Author {
 
     private static DBDriver dbDriver = new DBDriver();
@@ -65,10 +68,18 @@ public class Author {
         return homepage;
     }
 
+    /**
+     * get all authors from the DB
+     * @return a list of all the authors' names
+     */
     public static List<String> getAllAuthors() {
         return dbDriver.getPeople();
     }
 
+    /**
+     * update the author object's attributes
+     * @param attributes a map of attributes to be updated
+     */
     public void updateInfo(Map<String, String> attributes) {
         if (attributes == null) return;
 
@@ -109,6 +120,9 @@ public class Author {
         }
     }
 
+    /**
+     * update the author information in DB
+     */
     public void updateInDB() {
         System.out.println("Updating " + this.name + "...");
         authorCount++;

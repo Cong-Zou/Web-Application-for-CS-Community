@@ -1,4 +1,8 @@
 public class Util {
+
+    /**
+     * Returns whether the given nameStr matches with the author's name
+     */
     public static boolean matchesAuthorName(String nameStr, String authorName) {
         if (nameStr == null || authorName == null) return false;
 
@@ -13,6 +17,9 @@ public class Util {
         return true;
     }
 
+    /**
+     * Util method to replace space with dash
+     */
     public static String replaceSpaceWithDash(String name) {
         name = name.toLowerCase().trim();
         return name.replaceAll("\\s+", "-");

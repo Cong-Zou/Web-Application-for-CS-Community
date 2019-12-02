@@ -1,7 +1,16 @@
 import java.util.List;
 
+/**
+ * The execution engine of author data collection
+ */
 public class AuthorDataCollector {
 
+    /**
+     * Collects author info from AMiner, Google Citation and their AMiner webpages
+     * @param aMiner the AMiner wrapper
+     * @param gCitation the Google Citation wrapper
+     * @param webPage the webpage wrapper
+     */
     public void collect(AMiner aMiner, GoogleCitation gCitation, WebPage webPage) {
         System.out.println("Starting to collect author data...");
         List<String> authors = Author.getAllAuthors();
@@ -29,10 +38,12 @@ public class AuthorDataCollector {
     public static void main(String[] args) {
         AuthorDataCollector adc = new AuthorDataCollector();
 
+        // Initialize the wrappers
         AMiner aMiner = new AMiner();
         GoogleCitation gCitation = new GoogleCitation();
         WebPage webPage = new WebPage();
 
+        // Collect author information
         adc.collect(aMiner, gCitation, webPage);
     }
 }

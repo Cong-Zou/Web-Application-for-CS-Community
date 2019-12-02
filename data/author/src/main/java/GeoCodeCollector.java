@@ -2,6 +2,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Mediator for location data collection
+ */
 public class GeoCodeCollector {
 
     static int count = 0;
@@ -11,12 +14,17 @@ public class GeoCodeCollector {
         GoogleGeoCode googleGeoCode = new GoogleGeoCode();
         List<String> papers = dbDriver.getPapers();
 
+        // collect location data for each paper from the DB
         for (String title: papers) {
+            // get the affiliations of the paper's authors
             List<String> affiliations = dbDriver.getPaperAuthorsAffiliations(title);
+            // get the most common affiliation
             String mostCommonAffiliation = getMostCommonAffiliation(affiliations);
             if (mostCommonAffiliation != null) {
+                // retrieves the affiliation's latitude, longitude and country from the Google Geocode API
                 GeoCode geoCode = googleGeoCode.getGeoInfo(mostCommonAffiliation);
                 if (geoCode != null) {
+                    // store the location data in DB
                     dbDriver.setPublicationCountryAndLatLng(title, geoCode.country, geoCode.lat, geoCode.lng);
                     count++;
                 }
@@ -24,6 +32,9 @@ public class GeoCodeCollector {
         }
     }
 
+    /**
+     * Returns the affiliation that appears the most in the list
+     */
     private String getMostCommonAffiliation(List<String> affiliations) {
         if (affiliations == null || affiliations.size() == 0) {
             return null;
@@ -31,6 +42,7 @@ public class GeoCodeCollector {
         
         Map<String, Integer> map = new HashMap<>();
 
+        // record the occurrance of each affiliation
         for (String affiliation : affiliations) {
             if (affiliation.length() > 0 && !affiliation.equals("null")) {
                 Integer count = map.get(affiliation);
@@ -40,6 +52,7 @@ public class GeoCodeCollector {
 
         Map.Entry<String, Integer> mostCommonAffiliation = null;
 
+        // get the most frequently appeared affiliation
         for (Map.Entry<String, Integer> affiliation : map.entrySet()) {
             if (mostCommonAffiliation == null
                     || affiliation.getValue() > mostCommonAffiliation.getValue()) {

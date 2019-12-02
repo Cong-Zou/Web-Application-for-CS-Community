@@ -8,6 +8,9 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Wrapper class for Google Citation, used to collect author's interests and photo
+ */
 public class GoogleCitation {
 
     public void collectAuthorInfo(Author author) {
@@ -63,6 +66,7 @@ public class GoogleCitation {
             return;
         }
 
+        // parse the result from Google Citation to collect author's interests and photo url
         try {
             JSONArray interests = response.getJSONArray("interests");
             StringBuilder interestList = new StringBuilder();

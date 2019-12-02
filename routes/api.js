@@ -380,18 +380,21 @@ router.get('/paper/categorize', async (req, res) => {
 router.get('/collaboration', async (req, res) => {
     try {
         const name = req.query.name;
+
+        // get first level coauthors from DB
         const result = await session.run(
             `MATCH (a:Author {name: $name})-[:Collaborates]->(o:Author) RETURN o.name AS coauthor`,
             {name: name}
         );
 
+        // initialize nodes and links for the network
         let authors = new Map();
         let links = [];
         let nodes = [];
         let count = 1;
+        // add the given author as group 1 to nodes
         nodes.push({id: count, name: name, group: 1});
         authors.set(name, count++);
-
 
         if (result.records.length > 0) {
             for (let i = 0; i < result.records.length; i++) {
@@ -401,11 +404,12 @@ router.get('/collaboration', async (req, res) => {
                     if (coauthor.length > 0 && coauthor.valueOf() !== "null".valueOf()) {
                         // node for graph
                         if (authors.get(coauthor) === undefined) {
+                            // add the first level coauthor as group 2 to nodes
                             nodes.push({id: count, name: coauthor, group: 2});
                             authors.set(coauthor, count++);
                         }
 
-                        // link for graph
+                        // add links between the given author and his coauthor
                         const authorIndex = authors.get(name);
                         const coauthorIndex = authors.get(coauthor);
                         links.push({source: authorIndex, target: coauthorIndex});
@@ -413,8 +417,10 @@ router.get('/collaboration', async (req, res) => {
                 }
             }
 
+            // for each first-level coauthors, get his coauthors
             for (const [coauthorName, index] of authors.entries()) {
                 if (coauthorName.valueOf() !== name.valueOf()) {
+                    // retrieve the second-level coauthors from DB
                     const result2 = await session.run(
                         `MATCH (a:Author {name: $name})-[:Collaborates]->(o:Author) RETURN o.name AS coauthor`,
                         {name: coauthorName}
@@ -443,6 +449,7 @@ router.get('/collaboration', async (req, res) => {
             }
         }
 
+        // send formatted data for coauthor network to front end
         const response = {nodes: nodes, links: links};
         console.log(response);
         res.status(200).json(response);
@@ -461,6 +468,8 @@ router.get('/map/keywords', async (req, res) => {
         const keywords = req.query.keywords;
         const keywordList = keywords.split(/(\s+)/);
 
+        // retrieve the title, latitude and longitude of the papers that contains
+        // any of the given keywords in its abstract or title and are from the given country
         const result = await session.run(
             `WITH $keywordList AS wordList UNWIND wordList AS word WITH word MATCH(p:Paper) WHERE (p.title CONTAINS word OR p.abstract CONTAINS word) AND p.country CONTAINS $country RETURN p.title, p.lat, p.lng`,
             {
@@ -469,6 +478,7 @@ router.get('/map/keywords', async (req, res) => {
             }
         );
 
+        // format and send data to front end for map display
         const publicationList = result.records.map(record => {
             return {
                 title: record.get("p.title"),
@@ -493,6 +503,8 @@ router.get('/map/channel', async (req, res) => {
         const startYear = req.query.startYear;
         const endYear = req.query.endYear;
 
+        // retrieve the title, latitude and longitude of the papers that contains
+        // the given channel name and are from the given year range
         const result = await session.run(
             `MATCH (p:Paper) WHERE p.venue CONTAINS $channel AND p.year >= $startYear AND p.year <= $endYear AND p.lat IS NOT NULL RETURN p.title, p.lat, p.lng`,
             {
@@ -502,6 +514,7 @@ router.get('/map/channel', async (req, res) => {
             }
         );
 
+      // format and send data to front end for map display
         const publicationList = result.records.map(record => {
             return {
                 title: record.get("p.title"),

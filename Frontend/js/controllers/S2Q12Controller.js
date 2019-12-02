@@ -12,12 +12,14 @@ angular.module("sose-research-community")
 
       console.log(keywords, countryGeocode.name, countryGeocode.location.lat, countryGeocode.location.lng);
 
+      // set map center to be the selected country
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 4,
         center: new google.maps.LatLng(countryGeocode.location.lat, countryGeocode.location.lng),
         mapTypeId: 'terrain'
       });
 
+      // make request to API for papers from the given country with the given keywords
       $http.get("/api/map/keywords?country=" + countryName + "&keywords=" + keywords).then(function(response){
         console.log(response.data);
         const results = response.data;
@@ -38,6 +40,7 @@ angular.module("sose-research-community")
 
   });
 
+// Geographic coordinates for countries
 const geocode = [
   {
     "formattedName":"Afghanistan",

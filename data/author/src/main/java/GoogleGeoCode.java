@@ -9,6 +9,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Scanner;
 
+/**
+ * Wrapper class for Google Geocode API,
+ * used to get the latitude, longitude and country of an affiliation
+ */
 public class GoogleGeoCode {
 
     public GeoCode getGeoInfo(String affiliation) {
@@ -18,14 +22,15 @@ public class GoogleGeoCode {
 
     private String getGeoCodeAPIResponse(String affiliation) {
         final String GEOCODE_API = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-        final String API_KEY = "&key=AIzaSyD9x4lgdZ2gzPF8r4Yo1YybNqWYLOtrB8k";
+        final String API_KEY = "&key=" + "YOUR_API_KEY";
 
         try {
+            // request the geocode API for location information given the affiliation name
             URL url = new URL(GEOCODE_API + URLEncoder.encode(affiliation, "UTF-8") + API_KEY);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
-            // Receive search response
+            // receive search response
             InputStream responseStream = connection.getInputStream();
             Scanner scanner = new Scanner(responseStream);
             String responseStr = scanner.useDelimiter("\\A").next();
@@ -43,6 +48,7 @@ public class GoogleGeoCode {
     private GeoCode parseResponse(String responseStr) {
         if (responseStr == null) return null;
         try {
+            // parse the json repsonse from Geocode API
             GeoCode geoCode = new GeoCode();
             JSONObject response = new JSONObject(responseStr);
             JSONObject result = response.getJSONArray("results").getJSONObject(0);
@@ -59,6 +65,7 @@ public class GoogleGeoCode {
                 }
             }
 
+            // return the location information of the affiliation
             JSONObject geometry = result.getJSONObject("geometry");
             JSONObject location = geometry.getJSONObject("location");
             geoCode.lat = location.getDouble("lat");
@@ -68,13 +75,5 @@ public class GoogleGeoCode {
         } catch (JSONException e) {
             return null;
         }
-    }
-
-
-
-    public static void main(String[] args) {
-        GoogleGeoCode g = new GoogleGeoCode();
-        GeoCode geoCode = g.getGeoInfo("KOM – Multimedia Communications Lab");
-        System.out.println(geoCode == null ? "null" : geoCode.country + " " + geoCode.lat + " " + geoCode.lng);
     }
 }

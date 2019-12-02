@@ -1,4 +1,16 @@
 # 18656-Fall-2019-Team7
+
+## How to Run the Web App
+
+To run the app locally:
+1. Run `node bin/www` to start the back end server.
+2. Run `node index.js` to start the front end server.
+3. Go to `http://localhost:3100/`.
+
+Or visit our app deployed on Heroku:
+`https://diwd-team7.herokuapp.com/`
+
+
 ## Advanced Requirments
 
 ### Requirement 1

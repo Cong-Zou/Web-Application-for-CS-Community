@@ -11,10 +11,11 @@ angular.module("sose-research-community")
 
       var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 2,
-        center: new google.maps.LatLng(37.0902, 95.7129),
+        center: new google.maps.LatLng(37.0902, 95.7129), // set center as United States
         mapTypeId: 'terrain'
       });
 
+      // get papers published in the given channel and year range from API
       $http.get("/api/map/channel?channel=" + channel + "&startYear=" + start + "&endYear=" + end).then(function(response){
         console.log(response.data);
         const results = response.data;

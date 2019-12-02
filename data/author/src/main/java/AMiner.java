@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Wrapper for AMiner to get author infomation - affiliation, title, interests, photo, homepage, email
+ */
 public class AMiner {
     private final String ENDPOINT_BASIC = "https://api.aminer.org/api/search/person";
 
@@ -23,11 +26,12 @@ public class AMiner {
         String name = author.getName();
 
         try {
+            // call AMiner API to get author info based on the author name
             URL url = new URL(ENDPOINT_BASIC + "?query=" + URLEncoder.encode(name, "UTF-8"));
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
-            // Receive search response
+            // receive search response
             InputStream responseStream = connection.getInputStream();
             Scanner scanner = new Scanner(responseStream);
             String responseStr = scanner.useDelimiter("\\A").next();
@@ -49,6 +53,7 @@ public class AMiner {
         JSONArray searchResults;
         String authorName = author.getName();
 
+        // parse json response from AMiner API
         try {
             response = new JSONObject(responseStr);
             searchResults = response.getJSONArray("result");
@@ -60,6 +65,7 @@ public class AMiner {
         Map<String, String> attributes = new HashMap<>();
         boolean found = false;
 
+        // loop through results and get author info from the matching author
         for (int i = 0; i < searchResults.length(); i++) {
             JSONObject result = searchResults.getJSONObject(i);
             if (Util.matchesAuthorName(result.getString("name"), authorName)) {

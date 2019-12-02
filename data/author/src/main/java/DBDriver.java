@@ -5,6 +5,9 @@ import java.util.List;
 
 import static org.neo4j.driver.v1.Values.parameters;
 
+/**
+ * The Driver class of the Neo4j database
+ */
 public class DBDriver implements AutoCloseable {
     private final Driver driver;
 
@@ -17,6 +20,11 @@ public class DBDriver implements AutoCloseable {
         driver = GraphDatabase.driver(URI, AuthTokens.basic(USER, PASSWORD));
     }
 
+    /**
+     * Executes a write transaction to DB
+     * @param command the write command
+     * @return the result of the write command
+     */
     public StatementResult execute(final String command) {
         try ( Session session = driver.session()) {
             StatementResult result = session.writeTransaction(tx -> tx.run(command));
@@ -27,6 +35,10 @@ public class DBDriver implements AutoCloseable {
         }
     }
 
+    /**
+     * Gets all authors from the DB
+     * @return a list of all authors' names
+     */
     public List<String> getPeople() {
         try ( Session session = driver.session() )
         {
@@ -45,6 +57,10 @@ public class DBDriver implements AutoCloseable {
         return people;
     }
 
+    /**
+     * Gets all papers from the DB
+     * @return a list of all papers' titles
+     */
     public List<String> getPapers() {
         try ( Session session = driver.session() )
         {
@@ -63,6 +79,11 @@ public class DBDriver implements AutoCloseable {
         return papers;
     }
 
+    /**
+     * Gets the affiliations of the given paper's authors
+     * @param paperTitle the title of the paper
+     * @return a list of affiliation names of the paper's authors
+     */
     public List<String> getPaperAuthorsAffiliations(String paperTitle) {
         try ( Session session = driver.session() )
         {
@@ -83,6 +104,9 @@ public class DBDriver implements AutoCloseable {
         return affiliations;
     }
 
+    /**
+     * Finds a paper with the given title and sets its country, lat and lng in DB
+     */
     public void setPublicationCountryAndLatLng(String title, String country, double lat, double lng) {
         try ( Session session = driver.session() )
         {
