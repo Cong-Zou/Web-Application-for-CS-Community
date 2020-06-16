@@ -1,5 +1,10 @@
 # 18656-Fall-2019-Team7
 
+## Introduction
+
+Developed a web application and scientific workflows for researchers in the computer science community to discover the personalized
+academic resources and potential collaborators with similar interests.
+
 ## How to Run the Web App
 
 To run the app locally:
